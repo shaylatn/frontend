@@ -14,8 +14,9 @@ class Routes {
     if (movie) {
       return await Rating.getMovieRating(movie);
     } else {
-      //const movies = (await Promise.all((await Rating.getRatings({})).map(async (currRating) => Movie.getById(currRating.movie)))).flat();
-      return await Rating.getRatings({});
+      const movies = await Promise.all((await Rating.getRatings({})).map(async (currRating) => [await Movie.getById(currRating.movie), currRating.rating].flat()));
+      return movies;
+      //eturn await Rating.getRatings({});
     }
   }
 

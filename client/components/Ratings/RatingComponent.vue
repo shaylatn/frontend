@@ -3,8 +3,8 @@ const props = defineProps(["rate"]);
 </script>
 
 <template>
-  <p class="title">{{ props.rate.movie }}</p>
-  <p class="title">{{ props.rate.rating }}</p>
+  <p class="title">{{ props.rate[0].title }}</p>
+  <p class="title">{{ props.rate[1] }}</p>
 </template>
 
 <style scoped>
