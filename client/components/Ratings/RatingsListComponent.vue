@@ -27,7 +27,6 @@ onBeforeMount(async () => {
 </script>
 
 <template>
-  {{ ratings }}
   <section class="posts" v-if="loaded && ratings.length !== 0">
     <article v-for="movie in ratings" :key="movie._id">
       <RatingComponent :rate="movie" />
