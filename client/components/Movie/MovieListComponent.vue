@@ -3,7 +3,6 @@ import { useUserStore } from "@/stores/user";
 import { fetchy } from "@/utils/fetchy";
 import { storeToRefs } from "pinia";
 import { onBeforeMount, ref } from "vue";
-import CreateMovieForm from "./CreateMovieForm.vue";
 import MovieComponent from "./MovieComponent.vue";
 
 const { isLoggedIn } = storeToRefs(useUserStore());
@@ -51,10 +50,10 @@ onBeforeMount(async () => {
 </script>
 
 <template>
-  <section v-if="isLoggedIn">
+  <!-- <section v-if="isLoggedIn">
     <h2>Add a movie:</h2>
     <CreateMovieForm @refreshMovies="getMovies" />
-  </section>
+  </section> -->
   <section class="posts" v-if="loaded && movies.length !== 0">
     <article v-for="movie in movies" :key="movie._id">
       <MovieComponent :movie="movie" @refreshMovies="getMovies" />
