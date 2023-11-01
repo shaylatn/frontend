@@ -2,14 +2,17 @@
 import { useToastStore } from "@/stores/toast";
 import { useUserStore } from "@/stores/user";
 import { storeToRefs } from "pinia";
-import { computed, onBeforeMount } from "vue";
+import { computed, onBeforeMount, ref } from "vue";
 import { RouterLink, RouterView, useRoute } from "vue-router";
+import SideBar from "./components/Navbar/SideBar.vue";
 
 const currentRoute = useRoute();
 const currentRouteName = computed(() => currentRoute.name);
 const userStore = useUserStore();
 const { isLoggedIn } = storeToRefs(userStore);
 const { toast } = storeToRefs(useToastStore());
+
+let showSidebar = ref(false);
 
 // Make sure to update the session before mounting the app in case the user is already logged in
 onBeforeMount(async () => {
@@ -19,15 +22,21 @@ onBeforeMount(async () => {
     // User is not logged in
   }
 });
+
+function toggleSidebar() {
+  showSidebar.value = !showSidebar.value;
+}
 </script>
 
 <template>
   <header>
     <nav>
       <div class="title">
+        <button class="btn-small pure-button" @click="toggleSidebar"><img src="@/assets/images/navbar-menu.png" /></button>
+
         <img src="@/assets/images/logo.svg" />
         <RouterLink :to="{ name: 'Home' }">
-          <h1>Social Media App</h1>
+          <h1>ScreenShare</h1>
         </RouterLink>
       </div>
       <ul>
@@ -35,7 +44,10 @@ onBeforeMount(async () => {
           <RouterLink :to="{ name: 'Home' }" :class="{ underline: currentRouteName == 'Home' }"> Home </RouterLink>
         </li>
         <li v-if="isLoggedIn">
+          <RouterLink :to="{ name: 'Movies' }" :class="{ underline: currentRouteName == 'Movies' }"> Movies </RouterLink>
+
           <RouterLink :to="{ name: 'Settings' }" :class="{ underline: currentRouteName == 'Settings' }"> Settings </RouterLink>
+          <RouterLink :to="{ name: 'Profile' }" :class="{ underline: currentRouteName == 'Profile' }"> Profile </RouterLink>
         </li>
         <li v-else>
           <RouterLink :to="{ name: 'Login' }" :class="{ underline: currentRouteName == 'Login' }"> Login </RouterLink>
@@ -46,6 +58,7 @@ onBeforeMount(async () => {
       <p>{{ toast.message }}</p>
     </article>
   </header>
+  <div v-if="showSidebar"><SideBar @closeSidebar="toggleSidebar" /></div>
   <RouterView />
 </template>
 
@@ -54,7 +67,7 @@ onBeforeMount(async () => {
 
 nav {
   padding: 1em 2em;
-  background-color: lightgray;
+  background-color: #3b86f5;
   display: flex;
   align-items: center;
 }

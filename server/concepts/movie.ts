@@ -25,6 +25,11 @@ export default class MovieConcept {
     const movies = await this.getMovies({ title });
     return movies;
   }
+  async getById(_id: ObjectId) {
+    const movie = await this.getMovies({ _id });
+    return movie;
+  }
+
   private async isMovieUnique(title: string) {
     if (await this.movies.readOne({ title })) {
       throw new NotAllowedError(`Movie with name ${title} already exists!`);

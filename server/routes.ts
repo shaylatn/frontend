@@ -14,6 +14,7 @@ class Routes {
     if (movie) {
       return await Rating.getMovieRating(movie);
     } else {
+      //const movies = (await Promise.all((await Rating.getRatings({})).map(async (currRating) => Movie.getById(currRating.movie)))).flat();
       return await Rating.getRatings({});
     }
   }
@@ -27,15 +28,16 @@ class Routes {
   @Router.post("/favorite")
   async createFavorites(session: WebSessionDoc, item: ObjectId) {
     const user = WebSession.getUser(session);
-    return await Favorite.addFavorite(user, item);
+    return await Favorite.addFavorite(user, new ObjectId(item));
   }
   @Router.get("/favorite")
   async getFavorites(session: WebSessionDoc) {
     const user = WebSession.getUser(session);
-    return await Favorite.getByUser(user);
+    const movieTitle = await Promise.all((await Favorite.getByUser(user)).map(async (currFav) => Movie.getById(new ObjectId(currFav.item))));
+    return movieTitle.flat();
   }
 
-  @Router.post("/movie")
+  @Router.post("/movie/:id")
   async createMovie(title: string, genres: Set<string>, platforms: Set<string>) {
     return await Movie.create(title, genres, platforms);
   }
